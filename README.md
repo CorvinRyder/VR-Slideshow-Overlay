@@ -32,7 +32,7 @@ Every slideshow plugin is a Python script that you can edit in the “plugins”
 
 The program supports outputting to:
 
-- OpenVR overlay. A overlay will attach to the hand of your choose. Currently customization options are limited, and will provide more options in the future update.
+- OpenVR overlay. A overlay will attach to the hand of your choice. Currently customization options are limited, and will provide more options in the future update.
 - VRChat chatbox. Output the text to VRChat's chatbox via OSC.
 - Text file. Useful if you want the output text to be read by other application, like OBS streaming application.
 
@@ -75,12 +75,6 @@ If you found any bug or area of improvement when you're using the application, p
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgements
-
-Do you know that this project is started upon the request of my beloved friend, the attention seeker, the goofy Yotuber - TwoCool4Yo?
-
-Go check out his Youtube channel, it's full of funny content! :3
 
 ## Contact
 

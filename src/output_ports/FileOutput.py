@@ -3,7 +3,6 @@ import config;
 
 config.add_general_setting_path("FileOutput", "output_ports.FileOutput")
 config.addConfig("FileOutput", "IS_ENABLED", "Enable outputting to a text file?", "bool")
-config.addConfig("FileOutput", "OUTPUT_FILENAME", "Output File name", "str")
 
 IS_ENABLED = False;
 OUTPUT_FILENAME = "output.txt";

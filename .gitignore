@@ -3,3 +3,4 @@ pythonosc
 build
 release
 dist
+config.json

@@ -5,12 +5,16 @@ class App:
     def __init__(self, root, commandCallback):
         self.commandCallback = commandCallback;
 
+        root.protocol("WM_DELETE_WINDOW", lambda :(commandCallback("mainwindowclose")));
+
         root.title("VR Slideshow Overlay")
         root.resizable(width=False, height=False)
 
         app_name_label = tk.Label(root, text="VR Slideshow Overlay", font=("Segoe UI", 20))
-        app_name_label.grid(row=0, columnspan=2, padx=10, pady=20)
+        app_name_label.grid(row=0, columnspan=2, padx=10, pady=10)
         app_name_label["justify"] = "center"
+
+        
 
         GButton_407=tk.Button(root, text="Start")
         GButton_407["bg"] = "#f0f0f0"

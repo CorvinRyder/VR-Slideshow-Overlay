@@ -14,6 +14,8 @@ ONUPDATE_RETRY_COUNT = 3;
 SLIDESHOW_ALWAYS_ONTOP = "LocalTime";
 SLIDESHOW_ALWAYS_ATBOTTOM = "";
 
+FORCE_TERMINATE = False;
+
 class EmptySlideshow:
     def onUpdate(self,scriptUpTime):
         return "";
@@ -66,6 +68,8 @@ def update_loop():
                 print(outputStr);
                 for output in outputs:
                     output.outputString(outputStr);
+                if FORCE_TERMINATE:
+                    return;
                 time.sleep(SLIDESHOW_INTERVAL);
             except Exception as ex:
                 print("Cannot get update from plugin",module);

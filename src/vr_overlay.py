@@ -3,19 +3,26 @@ import tkinter as tk;
 from updateloop import MainLoop, LoadPlugins;
 import config;
 import os;
+import threading;
 
 root = None;
+mainLoop = None;
 
 def commandCallback(command):
+    global root;
     if command=="startscript":
-        root.destroy();
-        MainLoop.update_loop();
+        mainLoop = threading.Thread(target = MainLoop.update_loop);
+        mainLoop.start();
     if command=="configwindow":
         switchWindow(S2_SettingWindow.App)
     if command=="settingwinclose":
         # print("Window Closed!");
         config.saveConfig();
         switchWindow(S1_StartWindow.App);
+    if command=="mainwindowclose":
+        MainLoop.FORCE_TERMINATE = True;
+        if root is not None:
+            root.destroy();
 
 def switchWindow(windowClass):
     global root;

@@ -1,8 +1,8 @@
 import config;
-from PIL import Image, ImageDraw, ImageFont, ImageColor;
 import openvr;
 import ctypes;
 import time
+from output_ports.gdi_canvas import GdiCanvas
 
 config.add_general_setting_path("VROverlay (Experimental)", "output_ports.VROverlay")
 config.addConfig("VROverlay (Experimental)", "IS_ENABLED", "Enable outputting to VROverlay?", "bool")
@@ -12,9 +12,9 @@ IS_ENABLED = False;
 IS_RIGHT_HAND = True;
 
 # TODO: Check if every Windows system has the font file "MSYH" (Microsoft YaHei)
-FONT_NAME = "msyh.ttc";
-TRANSPARENT = ImageColor.getrgb("#FFFFFF00");
-OVERLAY_BACKGROUND = ImageColor.getrgb("#000000AA");
+FONT_NAME = "Segoe UI Light";
+TRANSPARENT = (255,255,255,255,0);
+OVERLAY_BACKGROUND = (0,0,0,170);
 SIZE_RATIO = 1.6;
 WIDTH = 500;
 HEIGHT = round(WIDTH / SIZE_RATIO);
@@ -68,13 +68,7 @@ def isOutputReady():
         return False;
 
 def initImage():
-    global font;
-    global img;
-    global draw;
     global imageData;
-    font = ImageFont.truetype(FONT_NAME, 24)
-    img = Image.new("RGBA", (WIDTH,HEIGHT), 0);
-    draw = ImageDraw.Draw(img);
     imageData = ctypes.c_buffer(b'', WIDTH * HEIGHT * 4);
 
 def overlayMatrix():
@@ -125,16 +119,39 @@ def createImage(pText):
     text = "\n".join(pText);
     text = text.replace("\v", "\n").replace("\t","  ")
     pText = text.split("\n");
-    draw.rectangle([(0, 0), (WIDTH, HEIGHT)], TRANSPARENT);
-    boundary = draw.textbbox((OVERLAY_PADDING,OVERLAY_PADDING),text, font);
-    textRectW = min(boundary[2] - boundary[0], WIDTH);
-    textRectH = min(boundary[3] - boundary[1], HEIGHT);
-    startX = max((WIDTH - textRectW) / 2, OVERLAY_PADDING)
-    startY = HEIGHT - textRectH - boundary[1];
-    draw.rectangle([(startX - OVERLAY_PADDING  , startY - OVERLAY_PADDING), ( min(startX + textRectW + OVERLAY_PADDING, WIDTH) - 1 , HEIGHT - 1)], OVERLAY_BACKGROUND, "white", 1);
-    draw.text((startX, startY), text, "white", font);
-    imageBytes = img.tobytes();
-    imageData.value = imageBytes;
+
+    with GdiCanvas(WIDTH, HEIGHT) as canvas:
+        canvas.clear((255, 255, 255, 0));
+        text_w, text_h = canvas.measure_text(text, font_size=24, bold=True, font_name=FONT_NAME);
+
+        textRectW = min(text_w, WIDTH);
+        textRectH = min(text_h, HEIGHT);
+    
+        startX = max((WIDTH - textRectW) / 2, OVERLAY_PADDING)
+        startY = HEIGHT - textRectH - OVERLAY_PADDING;
+    
+        canvas.draw_rectangle(
+            startX - OVERLAY_PADDING, 
+            startY - OVERLAY_PADDING, 
+            min(startX + textRectW + OVERLAY_PADDING, WIDTH) - 1, 
+            HEIGHT - startY + OVERLAY_PADDING - 1,
+            fill_color=OVERLAY_BACKGROUND,
+            border_color=(255, 255, 255, 255),
+            border_width=1
+        );
+
+        canvas.draw_text(
+            text=text,
+            x=startX,
+            y=startY,
+            color=(255, 255, 255),
+            font_size=24,
+            bold=True,
+            font_name=FONT_NAME,
+            # align="center"
+        )
+
+        imageData.raw  = canvas.get_bytes();
 
 def outputString(text):
     global vrSystem;

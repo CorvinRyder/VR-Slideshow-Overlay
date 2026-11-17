@@ -133,7 +133,7 @@ def createImage(pText):
         canvas.draw_rectangle(
             startX - OVERLAY_PADDING, 
             startY - OVERLAY_PADDING, 
-            min(startX + textRectW + OVERLAY_PADDING, WIDTH) - 1, 
+            min(textRectW + OVERLAY_PADDING * 2, WIDTH) - 1, 
             HEIGHT - startY + OVERLAY_PADDING - 1,
             fill_color=OVERLAY_BACKGROUND,
             border_color=(255, 255, 255, 255),
@@ -144,11 +144,13 @@ def createImage(pText):
             text=text,
             x=startX,
             y=startY,
+            width=textRectW,
+            height=textRectH,
             color=(255, 255, 255),
             font_size=24,
             bold=True,
             font_name=FONT_NAME,
-            # align="center"
+            align="center"
         )
 
         imageData.raw  = canvas.get_bytes();

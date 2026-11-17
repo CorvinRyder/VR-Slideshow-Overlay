@@ -7,9 +7,10 @@ URL_IPINFO = "https://ipinfo.io/";
 # Visit https://open-meteo.com/en/docs for more the information of vailable weather data and how you get them
 URL_OPEN_METEO_FORMAT = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=temperature_2m,relative_humidity_2m,is_day,weather_code&timezone=auto";
 URL_GEOCODING = "https://geocode.maps.co/search?q=%s"
-CURRENT_WEATHER_FORMAT = "Location: %s\vTemp.: %s%s\tRH: %s%%\vWeather: %s";
+CURRENT_WEATHER_FORMAT = "Temp.: %s%s\tRH: %s%%\vWeather: %s";
 REFRESH_RATE = 30;
 USE_FAHRENHEIT = False;
+SHOW_LOCATION = True;
 
 MODULE_NAME = "LocalWeather";
 MODULE_DESC = "Show your city and the local weather"
@@ -18,6 +19,7 @@ PLUGIN_ENABLED = False;
 config.addConfig(__name__, "CITY_NAME", "Enter the city name (City, country)\nLeave it empty to auto detect the city from your IP address", "str")
 config.addConfig(__name__, "USE_FAHRENHEIT", "Use fahrenheit?", "bool")
 config.addConfig(__name__, "REFRESH_RATE", "Update Frequence, in minute", "num")
+config.addConfig(__name__, "SHOW_LOCATION", "Show location?", "bool")
 
 class LocalWeather:
     cached_message = None;
@@ -62,7 +64,10 @@ class LocalWeather:
         isDay = cached_weather["current"]["is_day"];
         weatherCode = str(cached_weather["current"]["weather_code"]);
         weather = WMO_WEATHER_CODE_LUT[weatherCode]["day" if isDay==1 else "night"]["description"];
-        return CURRENT_WEATHER_FORMAT % (city,temp,tempUnit,rh,weather)
+        returnval = CURRENT_WEATHER_FORMAT % (temp,tempUnit,rh,weather)
+        if SHOW_LOCATION:
+            returnval = "Location: " + city + "\v" + returnval;
+        return returnval;
             
 # https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 WMO_WEATHER_CODE_LUT = {

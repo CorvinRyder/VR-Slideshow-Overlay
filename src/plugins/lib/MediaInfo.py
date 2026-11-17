@@ -68,6 +68,13 @@ class MediaWatcher:
         5: "Paused",
     }
 
+    _MEDIA_TYPE_MAP = {
+        0: "Unknown",
+        1: "Music",
+        2: "Video",
+        3: "Image",
+    }
+
     def __init__(self):
         self._owns_com = False
         self._closed = False
@@ -225,6 +232,8 @@ class MediaWatcher:
         try:
             timeline = self._read_timeline_from_session(session_ptr)
             status_str = "Unknown"
+            media_type_str = "Unknown"
+            
             get_playback_info = self._get_vtable_func(session_ptr, 9, HRESULT, ctypes.c_void_p)
             self._check_hr(get_playback_info(session_ptr, ctypes.byref(playback_info_ptr)), "GetPlaybackInfo")
 
@@ -233,6 +242,10 @@ class MediaWatcher:
                 status_code = ctypes.c_int(0)
                 self._check_hr(get_status(playback_info_ptr, ctypes.byref(status_code)), "get_PlaybackStatus")
                 status_str = self._STATUS_MAP.get(status_code.value, "Unknown")
+                get_media_type = self._get_vtable_func(playback_info_ptr, 8, HRESULT, ctypes.c_void_p)
+                media_type_code = ctypes.c_int(0)
+                self._check_hr(get_media_type(playback_info_ptr, ctypes.byref(media_type_code)), "get_PlaybackType")
+                media_type_str = self._MEDIA_TYPE_MAP.get(media_type_code.value, "Unknown")
 
             try_get_props = self._get_vtable_func(session_ptr, 7, HRESULT, ctypes.c_void_p)
             self._check_hr(try_get_props(session_ptr, ctypes.byref(op_props_ptr)), "TryGetMediaPropertiesAsync")
@@ -257,6 +270,7 @@ class MediaWatcher:
             "status": status_str,
             "position": timeline["position"],
             "duration": timeline["duration"],
+            "type": media_type_str,
             }
         finally:
             self._release_com(props_ptr)

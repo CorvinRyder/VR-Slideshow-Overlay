@@ -116,14 +116,14 @@ def translateError(ex):
     return translation;
 
 def createImage(pText):
-    text = "\n".join(pText);
-    text = text.replace("\v", "\n").replace("\t","  ")
-    pText = text.split("\n");
-
+    text = "\n".join(pText).replace("\v", "\n").replace("\t","  ")
+    
     with GdiCanvas(WIDTH, HEIGHT) as canvas:
         canvas.clear((255, 255, 255, 0));
-        text_w, text_h = canvas.measure_text(text, font_size=24, bold=True, font_name=FONT_NAME);
-
+        
+        # The API will handle text warpping if you supple the max_width parameter
+        text_w, text_h = canvas.measure_text(text, font_size=24, bold=True, font_name=FONT_NAME, max_width=WIDTH - OVERLAY_PADDING * 2);
+        
         textRectW = min(text_w, WIDTH);
         textRectH = min(text_h, HEIGHT);
     

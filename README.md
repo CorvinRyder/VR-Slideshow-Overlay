@@ -1,5 +1,7 @@
 # VR Slideshow Overlay
 
+![Language](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 <img width="250" src="https://github.com/EbonCorvin/VR-Slideshow-Overlay/assets/153107703/08332a7c-0bfa-475e-b808-eb3e7dcb25f7">
@@ -7,7 +9,6 @@
 <img width="250" src="https://github.com/EbonCorvin/VR-Slideshow-Overlay/assets/153107703/a6b6c0cd-a116-43f6-820f-2ac4c6d0f552">
 
 (Sorry, I don't have time to make promotional material at the moment, so here are some screenshots of how it looks like in VR)
-
 
 ## False antivirus alarm
 
@@ -35,6 +36,7 @@ The application comes with the following slideshow plugins:
 - OnlineFriends.py - Display the number of your VRChat online friends and number of your friends who are currently in a private world
 - PCUsage.py - Display the PC usage information (RAM / CPU / Usage)
 - SpotifyTrack.py - Display the current Spotify track you're listening to
+- NowPlayingWin10.py - Display the current media in **Windows 10** (Spotify, YouTube Music, etc.)
 - VRCUptime.py - Display your VRChat uptime (The time passed since you have played VRChat)
 
 Every slideshow plugin is a Python script that you can edit in the “plugins” folder. You can also create your own plugin to display information the original application doesn’t support. Please have a look at the in the “example” folder.
@@ -65,7 +67,6 @@ If you want to run the script by yourself, you may have to install the following
 - GPUtil
 - requests
 - openvr
-- pillow
 
 I assume everyone who choose to run the script by themselves already have the experience on Python programming. Please try not to ask me about running the script by themselves.
 
